@@ -15,7 +15,7 @@ public class App {
         String greeting;
 
         try {
-            Reader reader = Files.newBufferedReader(Paths.get("/Users/aprilwatson/workspace/Java/quotes/recentquotes.json"));
+            Reader reader = Files.newBufferedReader(Paths.get("./recentquotes.json"));
             ArrayList<Quote> quotes = new Gson().fromJson(reader, new TypeToken<ArrayList<Quote>>() {}.getType());
 
             Random rand = new Random();
