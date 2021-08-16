@@ -13,9 +13,8 @@ import com.google.gson.reflect.TypeToken;
 public class App {
     public String getGreeting() {
         String greeting;
-        try {
-            Gson gson = new Gson();
 
+        try {
             Reader reader = Files.newBufferedReader(Paths.get("/Users/aprilwatson/workspace/Java/quotes/recentquotes.json"));
             ArrayList<Quote> quotes = new Gson().fromJson(reader, new TypeToken<ArrayList<Quote>>() {}.getType());
 
@@ -28,6 +27,7 @@ public class App {
             ex.printStackTrace();
             greeting = ex.getMessage();
         }
+
         return greeting;
     }
 
