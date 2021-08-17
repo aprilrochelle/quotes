@@ -3,11 +3,19 @@
  */
 package quotes;
 import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.io.Reader;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.ArrayList;
+
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 public class App {
@@ -31,7 +39,34 @@ public class App {
         return greeting;
     }
 
+
+    public String getGreetingFromAPI() {
+        String randomQuote;
+
+        var client = HttpClient.newHttpClient();
+        var request = HttpRequest.newBuilder(
+                URI.create("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en"))
+                .header("accept", "application/json")
+                .build();
+
+        try {
+            var response = client.send(request, BodyHandlers.ofString());
+            JsonObject json = new Gson().fromJson(response.body(), new TypeToken<JsonObject>() {}.getType());
+            String text = json.get("quoteText").toString();
+            String author = json.get("quoteAuthor").toString();
+            randomQuote = "As " + author + " said, " + text;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            randomQuote = ex.getMessage();
+        }
+
+        return randomQuote;
+    }
+
+
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        System.out.println(new App().getGreetingFromAPI());
     }
 }
